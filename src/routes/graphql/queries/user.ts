@@ -1,5 +1,6 @@
+import { GraphQLNonNull } from 'graphql'
 import { getAllUsers, getUserById } from "../actions/user.js"
-import { Users } from "../types/user.js"
+import { User, Users } from "../types/user.js"
 import { UUIDType } from "../types/uuid.js"
 
 export const UsersQuery = {
@@ -8,9 +9,9 @@ export const UsersQuery = {
 }
 
 export const UserQuery = {
-  type: Users,
+  type: User,
   args: {
-    id: { type: UUIDType }
+    id: { type: new GraphQLNonNull(UUIDType) }
   },
   resolve: getUserById
 }

@@ -1,3 +1,4 @@
+import { GraphQLNonNull } from "graphql"
 import { getAllMemberTypes, getMemberTypeById } from "../actions/member.js"
 import { MemberType, MemberTypeId, MemberTypes } from "../types/member.js"
 
@@ -9,7 +10,7 @@ export const MemberTypesQuery = {
 export const MemberTypeQuery = {
   type: MemberType,
   args: {
-    id: { type: MemberTypeId }
+    id: { type: new GraphQLNonNull(MemberTypeId) }
   },
   resolve: getMemberTypeById
 }

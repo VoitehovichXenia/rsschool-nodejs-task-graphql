@@ -1,3 +1,4 @@
+import { GraphQLNonNull } from "graphql"
 import { getAllPosts, getPostById } from "../actions/post.js"
 import { Post, Posts } from "../types/post.js"
 import { UUIDType } from "../types/uuid.js"
@@ -10,7 +11,7 @@ export const PostsQuery = {
 export const PostQuery = {
   type: Post,
   args: {
-    id: { type: UUIDType }
+    id: { type: new GraphQLNonNull(UUIDType) }
   },
   resolve: getPostById
 }

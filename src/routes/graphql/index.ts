@@ -7,9 +7,9 @@ import { UserQuery, UsersQuery } from './queries/user.js';
 import { ProfileQuery, ProfilesQuery } from './queries/profile.js';
 import { MemberTypesQuery, MemberTypeQuery } from './queries/member.js';
 
-import { CreateUser } from './mutations/user.js';
-import { CreatePost } from './mutations/post.js';
-import { CreateProfile } from './mutations/profile.js';
+import { CreateUser, DeleteUser, SubscribeUser, UnubscribeUser, UpdateUser } from './mutations/user.js';
+import { CreatePost, DeletePost, UpdatePost } from './mutations/post.js';
+import { CreateProfile, DeleteProfile, UpdateProfile } from './mutations/profile.js';
 
 const schema: GraphQLSchema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -32,7 +32,15 @@ const schema: GraphQLSchema = new GraphQLSchema({
     fields: {
       createPost: CreatePost,
       createUser: CreateUser,
-      createProfile: CreateProfile
+      createProfile: CreateProfile,
+      deletePost: DeletePost,
+      deleteProfile: DeleteProfile,
+      deleteUser: DeleteUser,
+      changePost: UpdatePost,
+      changeProfile: UpdateProfile,
+      changeUser: UpdateUser,
+      subscribeTo: SubscribeUser,
+      unsubscribeFrom: UnubscribeUser
     },
   })
 })
