@@ -1,6 +1,7 @@
+import depthLimit from 'graphql-depth-limit';
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
-import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
+import { graphql, GraphQLObjectType, GraphQLSchema, parse, validate, specifiedRules, ValidationRule } from 'graphql';
 
 import { PostQuery, PostsQuery } from './queries/post.js';
 import { UserQuery, UsersQuery } from './queries/user.js';
@@ -10,6 +11,8 @@ import { MemberTypesQuery, MemberTypeQuery } from './queries/member.js';
 import { CreateUser, DeleteUser, SubscribeUser, UnubscribeUser, UpdateUser } from './mutations/user.js';
 import { CreatePost, DeletePost, UpdatePost } from './mutations/post.js';
 import { CreateProfile, DeleteProfile, UpdateProfile } from './mutations/profile.js';
+
+const MAX_REQ_DEPTH = 5
 
 const schema: GraphQLSchema = new GraphQLSchema({
   query: new GraphQLObjectType({
@@ -57,12 +60,22 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         200: gqlResponseSchema,
       },
     },
-    async handler(req) {
+    async handler(req, res) {
+      const parsedQuery = parse(req.body.query)
+      const depthRule = depthLimit(MAX_REQ_DEPTH) as ValidationRule
+      const errors = validate(schema, parsedQuery, [
+        depthRule,
+        ...specifiedRules
+      ])
+      
+      if (errors.length) {
+        return res.code(200).send({ errors });
+      }
       return graphql({
         schema,
         source: req.body.query,
         variableValues: req.body.variables,
-        contextValue: { prisma }
+        contextValue: { prisma },
       });
     },
   });
