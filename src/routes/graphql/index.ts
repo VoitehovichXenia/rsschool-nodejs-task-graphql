@@ -12,6 +12,8 @@ import { CreateUser, DeleteUser, SubscribeUser, UnubscribeUser, UpdateUser } fro
 import { CreatePost, DeletePost, UpdatePost } from './mutations/post.js';
 import { CreateProfile, DeleteProfile, UpdateProfile } from './mutations/profile.js';
 
+import { getLoaders } from './loaders/getLoaders.js';
+
 const MAX_REQ_DEPTH = 5
 
 const schema: GraphQLSchema = new GraphQLSchema({
@@ -75,7 +77,10 @@ const plugin: FastifyPluginAsyncTypebox = async (fastify) => {
         schema,
         source: req.body.query,
         variableValues: req.body.variables,
-        contextValue: { prisma },
+        contextValue: {
+          prisma,
+          loaders: getLoaders(prisma)
+        },
       });
     },
   });

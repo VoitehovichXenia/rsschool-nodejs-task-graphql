@@ -8,8 +8,5 @@ export const getAllMemberTypes = async (obj, args, context: ContextType) => {
 }
 
 export const getMemberTypeById = async (obj, args: MemberTypeSchemaArgs, context: ContextType) => {
-  if (!args.id) return null
-  return await context.prisma.memberType.findUnique({
-    where: { id: args.id }
-  })
+  return await context.loaders.memberTypes.load(args.id)
 }

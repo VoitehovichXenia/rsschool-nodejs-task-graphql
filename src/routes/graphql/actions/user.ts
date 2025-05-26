@@ -1,35 +1,19 @@
 import { ContextType, CreateArgs, GeneralArgs, GeneralObj, UpdateArgs } from "../types/general.js"
 
 export const getUserProfile = async (obj: GeneralObj, args, context: ContextType) => {
-  if (!obj.id) return null
-  return await context.prisma.profile.findUnique({
-    where: {
-      userId: obj.id
-    }
-  })
+  return await context.loaders.profiles.load(obj.id)
 }
 
 export const getUserPosts = async (obj: GeneralObj, args, context: ContextType) => {
-  if (!obj.id) return null
-  return await context.prisma.post.findMany({
-    where: {
-      authorId: obj.id
-    }
-  })
+  return await context.loaders.posts.load(obj.id)
 }
 
 export const getUserSubscribedTo = async (obj: GeneralObj, args, context: ContextType) => {
-  if (!obj.id) return null
-  return await context.prisma.user.findMany({
-    where: { subscribedToUser: { some: { subscriberId: obj.id }} }
-  })
+  return await context.loaders.userSubscribedTo.load(obj.id)
 }
 
 export const getSubscribedToUser = async (obj: GeneralObj, args, context: ContextType) => {
-  if (!obj.id) return null
-  return await context.prisma.user.findMany({
-    where: { userSubscribedTo: { some: { authorId: obj.id }} }
-  })
+  return await context.loaders.subscribedToUser.load(obj.id)
 }
 
 export const getAllUsers = async (obj, args, context: ContextType) => {

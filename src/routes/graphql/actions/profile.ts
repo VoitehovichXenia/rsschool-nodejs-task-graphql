@@ -4,10 +4,7 @@ import { MemberId } from "../types/member.js"
 type MemberTypeObj = { memberTypeId: string }
 
 export const getProfileMemberType = async (obj: MemberTypeObj, args, context: ContextType) => {
-  if (!obj.memberTypeId) return null
-  return await context.prisma.memberType.findUnique({
-    where: { id: obj.memberTypeId }
-  })
+  return context.loaders.memberTypes.load(obj.memberTypeId)
 }
 
 export const getAllProfiles = async (obj, args, context: ContextType) => {

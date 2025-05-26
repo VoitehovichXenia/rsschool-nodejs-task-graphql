@@ -4,6 +4,12 @@ import { Profile } from "./profile.js"
 import { Posts } from "./post.js"
 import { getSubscribedToUser, getUserPosts, getUserProfile, getUserSubscribedTo } from "../actions/user.js"
 
+export type UserData = {
+  id: string,
+  name: string,
+  balance: number
+}
+
 export const User: GraphQLObjectType = new GraphQLObjectType({
   name: 'UserType',
   fields: () => ({
