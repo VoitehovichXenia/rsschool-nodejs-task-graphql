@@ -1,7 +1,7 @@
 import { GraphQLBoolean, GraphQLInt, GraphQLList, GraphQLObjectType } from "graphql"
 import { UUIDType } from "./uuid.js"
 import { MemberType } from "./member.js"
-import { getAllProfiles, getProfileById, getProfileMemberType } from "../loaders/profile.js"
+import { getProfileMemberType } from "../actions/profile.js"
 
 export const Profile = new GraphQLObjectType({
   name: 'ProfileType',
@@ -16,17 +16,4 @@ export const Profile = new GraphQLObjectType({
   }
 })
 
-const Profiles = new GraphQLList(Profile)
-
-export const ProfilesSchema = {
-  type: Profiles,
-  resolve: getAllProfiles
-}
-
-export const ProfileSchema = {
-  type: Profile,
-  args: {
-    id: { type: UUIDType }
-  },
-  resolve: getProfileById
-}
+export const Profiles = new GraphQLList(Profile)

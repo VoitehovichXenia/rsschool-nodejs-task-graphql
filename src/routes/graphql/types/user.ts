@@ -2,9 +2,9 @@ import { GraphQLFloat, GraphQLList, GraphQLObjectType, GraphQLString } from "gra
 import { UUIDType } from "./uuid.js"
 import { Profile } from "./profile.js"
 import { Posts } from "./post.js"
-import { getAllUsers, getSubscribedToUser, getUserById, getUserPosts, getUserProfile, getUserSubscribedTo } from "../loaders/user.js"
+import { getSubscribedToUser, getUserPosts, getUserProfile, getUserSubscribedTo } from "../actions/user.js"
 
-const User: GraphQLObjectType = new GraphQLObjectType({
+export const User: GraphQLObjectType = new GraphQLObjectType({
   name: 'UserType',
   fields: () => ({
     id: { type: UUIDType },
@@ -23,17 +23,4 @@ const User: GraphQLObjectType = new GraphQLObjectType({
   })
 })
 
-const Users = new GraphQLList(User)
-
-export const UsersSchema = {
-  type: Users,
-  resolve: getAllUsers
-}
-
-export const UserSchema = {
-  type: User,
-  args: {
-    id: { type: UUIDType }
-  },
-  resolve: getUserById
-}
+export const Users = new GraphQLList(User)

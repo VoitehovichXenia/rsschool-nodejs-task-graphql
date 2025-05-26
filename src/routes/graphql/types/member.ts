@@ -1,11 +1,12 @@
 import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType } from "graphql"
-import { getAllMemberTypes, getMemberTypeById } from "../loaders/member.js"
 
-const MemberTypeId = new GraphQLEnumType({
+export type MemberId = 'BUSINESS' | 'BASIC'
+
+export const MemberTypeId = new GraphQLEnumType({
   name: 'MemberTypeId',
   values: {
     'BASIC': { value: 'BASIC' },
-    'BUISNESS': { value: 'BUISNESS' }
+    'BUSINESS': { value: 'BUSINESS' }
   }
 })
 
@@ -19,16 +20,3 @@ export const MemberType = new GraphQLObjectType({
 })
 
 export const MemberTypes = new GraphQLList(MemberType)
-
-export const MemberTypesSchema = {
-  type: MemberTypes,
-  resolve: getAllMemberTypes
-}
-
-export const MemberTypeSchema = {
-  type: MemberType,
-  args: {
-    id: { type: MemberTypeId }
-  },
-  resolve: getMemberTypeById
-}

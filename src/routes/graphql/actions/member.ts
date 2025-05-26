@@ -1,6 +1,6 @@
 import { ContextType } from "../types/general.js"
+import { MemberId } from "../types/member.js"
 
-type MemberId = 'BUISNESS' | 'BASIC'
 type MemberTypeSchemaArgs = { id: MemberId }
 
 export const getAllMemberTypes = async (obj, args, context: ContextType) => {

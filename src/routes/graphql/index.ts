@@ -1,26 +1,39 @@
 import { FastifyPluginAsyncTypebox } from '@fastify/type-provider-typebox';
 import { createGqlResponseSchema, gqlResponseSchema } from './schemas.js';
 import { graphql, GraphQLObjectType, GraphQLSchema } from 'graphql';
-import { MemberTypeSchema, MemberTypesSchema } from './types/member.js';
-import { PostsSchema, PostSchema } from './types/post.js';
-import { UsersSchema, UserSchema } from './types/user.js';
-import { ProfileSchema, ProfilesSchema } from './types/profile.js';
+
+import { PostQuery, PostsQuery } from './queries/post.js';
+import { UserQuery, UsersQuery } from './queries/user.js';
+import { ProfileQuery, ProfilesQuery } from './queries/profile.js';
+import { MemberTypesQuery, MemberTypeQuery } from './queries/member.js';
+
+import { CreateUser } from './mutations/user.js';
+import { CreatePost } from './mutations/post.js';
+import { CreateProfile } from './mutations/profile.js';
 
 const schema: GraphQLSchema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQuery',
     fields: {
       // Get all resources
-      memberTypes: MemberTypesSchema,
-      posts: PostsSchema,
-      users: UsersSchema,
-      profiles: ProfilesSchema,
+      memberTypes: MemberTypesQuery,
+      posts: PostsQuery,
+      users: UsersQuery,
+      profiles: ProfilesQuery,
       // Get resources by id
-      memberType: MemberTypeSchema,
-      post: PostSchema,
-      profile: ProfileSchema,
-      user: UserSchema
+      memberType: MemberTypeQuery,
+      post: PostQuery,
+      profile: ProfileQuery,
+      user: UserQuery
     }
+  }),
+  mutation: new GraphQLObjectType({
+    name: 'Mutation',
+    fields: {
+      createPost: CreatePost,
+      createUser: CreateUser,
+      createProfile: CreateProfile
+    },
   })
 })
 
