@@ -1,6 +1,6 @@
 import { GraphQLList, GraphQLObjectType, GraphQLString } from "graphql"
 import { UUIDType } from "./uuid.js"
-import { ContextType, GetResByIdResolverArgs } from "./general.js"
+import { getAllPosts, getPostById } from "../loaders/post.js"
 
 const Post = new GraphQLObjectType({
   name: 'PostType',
@@ -11,13 +11,11 @@ const Post = new GraphQLObjectType({
   }
 })
 
-const Posts = new GraphQLList(Post)
+export const Posts = new GraphQLList(Post)
 
 export const PostsSchema = {
   type: Posts,
-  resolve: async (obj, args, context: ContextType) => {
-    return await context.prisma.post.findMany()
-  }
+  resolve: getAllPosts
 }
 
 export const PostSchema = {
@@ -25,12 +23,5 @@ export const PostSchema = {
   args: {
     id: { type: UUIDType }
   },
-  resolve: async (obj, args: GetResByIdResolverArgs, context: ContextType) => {
-    if (args.id) {
-      return await context.prisma.post.findFirst({
-        where: { id: args.id }
-      })
-    }
-    return null
-  }
+  resolve: getPostById
 }

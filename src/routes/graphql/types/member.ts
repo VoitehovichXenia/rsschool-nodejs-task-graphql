@@ -1,7 +1,5 @@
 import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType } from "graphql"
-import { ContextType } from "./general.js"
-
-type MemberId = 'BUISNESS' | 'BASIC'
+import { getAllMemberTypes, getMemberTypeById } from "../loaders/member.js"
 
 const MemberTypeId = new GraphQLEnumType({
   name: 'MemberTypeId',
@@ -24,24 +22,13 @@ export const MemberTypes = new GraphQLList(MemberType)
 
 export const MemberTypesSchema = {
   type: MemberTypes,
-  resolve: async (obj, args, context: ContextType) => {
-    return await context.prisma.memberType.findMany()
-  }
+  resolve: getAllMemberTypes
 }
-
-type MemberTypeSchemaArgs = { id: MemberId }
 
 export const MemberTypeSchema = {
   type: MemberType,
   args: {
     id: { type: MemberTypeId }
   },
-  resolve: async (obj, args: MemberTypeSchemaArgs, context: ContextType) => {
-    if (args.id) {
-      return await context.prisma.memberType.findFirst({
-        where: { id: args.id }
-      })
-    }
-    return null
-  }
+  resolve: getMemberTypeById
 }

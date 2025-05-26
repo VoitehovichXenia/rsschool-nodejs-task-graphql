@@ -19,7 +19,7 @@ const schema: GraphQLSchema = new GraphQLSchema({
       memberType: MemberTypeSchema,
       post: PostSchema,
       profile: ProfileSchema,
-      user: UserSchema,
+      user: UserSchema
     }
   })
 })

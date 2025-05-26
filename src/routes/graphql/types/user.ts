@@ -1,23 +1,33 @@
 import { GraphQLFloat, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql"
 import { UUIDType } from "./uuid.js"
-import { ContextType, GetResByIdResolverArgs } from "./general.js"
+import { Profile } from "./profile.js"
+import { Posts } from "./post.js"
+import { getAllUsers, getSubscribedToUser, getUserById, getUserPosts, getUserProfile, getUserSubscribedTo } from "../loaders/user.js"
 
-const User = new GraphQLObjectType({
+const User: GraphQLObjectType = new GraphQLObjectType({
   name: 'UserType',
-  fields: {
+  fields: () => ({
     id: { type: UUIDType },
     name: { type: GraphQLString },
-    balance: { type: GraphQLFloat }
-  }
+    balance: { type: GraphQLFloat },
+    profile: {
+      type: Profile,
+      resolve: getUserProfile
+    },
+    posts: {
+      type: Posts,
+      resolve: getUserPosts
+    },
+    userSubscribedTo: { type: new GraphQLList(User), resolve: getUserSubscribedTo },
+    subscribedToUser: { type: new GraphQLList(User), resolve: getSubscribedToUser },
+  })
 })
 
 const Users = new GraphQLList(User)
 
 export const UsersSchema = {
   type: Users,
-  resolve: async (obj, args, context: ContextType) => {
-    return await context.prisma.user.findMany()
-  }
+  resolve: getAllUsers
 }
 
 export const UserSchema = {
@@ -25,12 +35,5 @@ export const UserSchema = {
   args: {
     id: { type: UUIDType }
   },
-  resolve: async (obj, args: GetResByIdResolverArgs, context: ContextType) => {
-    if (args.id) {
-      return await context.prisma.user.findFirst({
-        where: { id: args.id }
-      })
-    }
-    return null
-  }
+  resolve: getUserById
 }
